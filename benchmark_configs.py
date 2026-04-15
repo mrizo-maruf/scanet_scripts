@@ -18,6 +18,7 @@ Usage:
 
 import numpy as np
 import cv2
+import json
 import argparse
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -272,6 +273,17 @@ def evaluate_config(scene_dir, config, K, align_frame, stride, voxel_size, max_e
         if m is None:
             return None
         out[mode] = m
+
+    # ── 5. Save transformation JSON ──
+    transform_data = {
+        "scale": s_sim,
+        "rotation": R_sim.tolist(),
+        "translation": t_sim.tolist(),
+    }
+    json_path = scene_dir / f"pi3_{config}_to_world.json"
+    with open(json_path, "w") as f:
+        json.dump(transform_data, f, indent=2)
+    print(f"saved {json_path.name}", end=" ", flush=True)
 
     return out
 
