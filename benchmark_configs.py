@@ -274,13 +274,14 @@ def evaluate_config(scene_dir, config, K, align_frame, stride, voxel_size, max_e
             return None
         out[mode] = m
 
-    # ── 5. Save transformation JSON ──
+    # ── 5. Save transformation JSON in scene folder ──
     transform_data = {
+        "config": config,
         "scale": s_sim,
         "rotation": R_sim.tolist(),
         "translation": t_sim.tolist(),
     }
-    json_path = scene_dir / f"pi3_{config}_to_world.json"
+    json_path = scene_dir / f"align_pi3_{config}.json"
     with open(json_path, "w") as f:
         json.dump(transform_data, f, indent=2)
     print(f"saved {json_path.name}", end=" ", flush=True)
